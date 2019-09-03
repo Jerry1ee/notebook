@@ -10,7 +10,7 @@ function myFunction() {
   }
  </script>
   ```
-  多次使用的同一脚本，可以放在外部文件中，如放在 myScript.js中，引用时方法如下：
+  多次使用的同一脚本，可以放在外部文件中，如放在 myScript.js中，引用时方法如下，src也可以是具体的网址：
   
  ```javascript
   <script src="myScript.js"></script>
