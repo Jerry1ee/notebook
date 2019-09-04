@@ -22,3 +22,6 @@ id 属性定义 HTML 元素。innerHTML 属性定义 HTML 内容</br>
 - 使用 document.write() 写入 HTML 输出 (在 HTML 文档完全加载后使用 document.write() 将删除所有已有的 HTML) 
 - 使用 innerHTML 写入 HTML 元素
 - 使用 console.log() 写入浏览器控制台
+
+## 2019.9.4
+### 
