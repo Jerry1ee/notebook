@@ -1,5 +1,5 @@
 # JS中的一些知识
-## 2019.9.3 
+## 基础
 ### 脚本的位置和使用
 脚本可以出现在<head></head>，<body></body>之间，把脚本放在body元素底部，可改善显示速度
 
@@ -23,7 +23,6 @@ id 属性定义 HTML 元素。innerHTML 属性定义 HTML 内容</br>
 - 使用 innerHTML 写入 HTML 元素
 - 使用 console.log() 写入浏览器控制台
 
-## 2019.9.4
 ### 一些特殊符号的应用
 - ==== 号：等值等型。        
 - ！== 号：不等值或不等型。
@@ -77,9 +76,41 @@ var person={
 objectName.propertyName 或 objectName["propertyName"]</br>
 ### 事件
 HTML 事件是发生在 HTML 元素上的“事情”，当在 HTML 页面中使用 JavaScript 时，JavaScript 能够“应对”这些事件。
+- 例如元素对某些事件的发生，使用JavaScript来进行相应的反应：
+```JavaScript
+<p id = "demo"></p>
+<button onclick = displayDate()></button>
+<script>
+function displayDate(){
+     document.getElementById("demo").innerHTML = Date();
+}
+</script>
+```
+| 事件	| 描述 |
+|-----|------|
+|onchange|     HTML元素已被改变|
+|onclick| 用户点击了 HTML 元素|
+|onmouseover|  用户把鼠标移动到 HTML 元素上|
+|onmouseout|   用户把鼠标移开 HTML 元素|
+|onkeydown|    用户按下键盘按键|
+|onload|	浏览器已经完成页面加载|
+### 字符串
 
+可用'' 或 ""来标注，\可以用来转义特殊字符，换行一般用+连接。；
+**注意不要把字符串声明为对象**
 
+### 字符串方法
 
-
+- length：返回字符串长度
+- indexOf(): 返回方法指定文本**首次**出现的索引，未找到返回-1
+- lastIndexOf(): 返回方法指定文本**最后一次**出现的索引，未找到返回-1
+- search(): 搜索特定值字符串，并返回出现位置
+- indexOf()和search()比较：search()方法无法设置第二个开始位置参数；indexOf() 方法无法设置更强大的搜索值（正则表达式）。
+### 提取部分字符串
+- slice(start, end)：提取并返回新字符串，如果参数为负数，则从末尾往前提取；若第二个参数为空，则直接提取剩余部分。
+- substring(start, end)：与slice()类似，但无法接受负数参数。
+- substr(start, length)：与slice()类似，但第二个参数是提取字符串的长度。
+### 替换字符串内容
+- replace(): 用另一个值替换在字符串中指定的值，replace() 方法不会改变调用它的字符串，它返回新的字符串，且默认只替换首个匹配。
 
 
