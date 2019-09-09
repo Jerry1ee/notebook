@@ -158,4 +158,69 @@ JavaScript 会把前缀为 0x 的数值常量解释为十六进制。利用toStr
 **数组属性和方法** </br>
 - length : 属性返回数组的长度（数组元素的数目）
 - Array.foreach(): 也可以进行数组遍历
-- push() ：向数组添加新元素
+- push() : 向数组添加新元素
+- toString() : 把数组转换为数组值（逗号分隔）的字符串
+- join() : 将所有数组元素结合为一个字符串。它的行为类似 toString()，但可以规定分隔符
+- pop() : 删除最后一个元素，返回“被弹出”的值，即这个被删除的元素
+- push() : 在数组结尾处向数组添加一个新的元素，返回新数组的长度
+- shift() : 删除首个数组元素，并把所有其他元素“位移”到更低的索引，返回被位移出的元素
+- unshift() : 在数组开头添加新元素，并“反向位移”旧元素，返回新数组长度 
+- delete:一般删除时不用delete，因为会留下空洞，要用pop或者push替代
+- splice() : 方法可用于向数组添加新项，经常用来不留空洞地替换元素</br>
+```JavaScript
+var fruits = ["Banana", "Orange", "Apple", "Mango"];
+fruits.splice(2, 0, "Lemon", "Kiwi");
+/*第一个参数（2）定义了应添加新元素的位置（拼接）。
+第二个参数（0）定义应删除多少元素。
+其余参数（“Lemon”，“Kiwi”）定义要添加的新元素。
+splice() 方法返回一个包含已删除项的数组*/
+```
+- concat() : 合并（连接）现有数组来创建一个新数组，参数数量任意
+- slice() : 方法用数组的某个片段切出新数组，也可接受两个参数，从开始参数选取元素，直到结束参数（不包括）为止
+```JavaScript
+var fruits = ["Banana", "Orange", "Lemon", "Apple", "Mango"];
+var citrus = fruits.slice(1); 
+/*结果 Orange, Lemon, Apple, Mango*/
+```
+
+**数组排序** </br>
+- sort() :方法以字母顺序对数组进行排序
+- reverse() :方法反转数组中的元素
+- 比值函数 : 比较函数的目的是定义另一种排序顺序，它返回一个正、负或零值。当 sort() 函数比较两个值时，会将值发送到比较函数，并根据所返回的值（负、零或正值）对这些值进行排序
+- 随机排序数组 :
+```JavaScript
+var points = [40, 100, 1, 5, 25, 10];
+points.sort(function(a, b){return 0.5 - Math.random()}); 
+```
+- 查找最高最低数组值 : Math.max.apply() 或者 Math.min.apply()
+
+**数组迭代** </br>
+- forEach() : 为数组的每个元素调用一次函数（回调函数）
+```JavaScript
+var txt = "";
+var numbers = [45, 4, 9, 16, 25];
+numbers.forEach(myFunction);
+
+function myFunction(value, index, array) {
+  txt = txt + value + "<br>"; 
+}
+/*若将txt作为 <p>标签内容输出，则为：
+45
+4
+9
+16
+25*/
+该函数接受 3 个参数：项目值，项目索引，数组本身
+```
+- Array.map() : 对每个数组元素执行函数来创建新数组;不会对没有值的数组元素执行函数;不会更改原始数组。
+```JavaScript
+var numbers1 = [45, 4, 9, 16, 25];
+var numbers2 = numbers1.map(myFunction);
+
+function myFunction(value, index, array) {
+  return value * 2;
+}
+/*numbers2 数组应该为 90，8，18，32，50
+该函数有 3 个参数：项目值，项目索引，数组本身
+当回调函数仅使用 value 参数时，可以省略索引和数组参数*/
+```
