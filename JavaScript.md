@@ -224,3 +224,29 @@ function myFunction(value, index, array) {
 该函数有 3 个参数：项目值，项目索引，数组本身
 当回调函数仅使用 value 参数时，可以省略索引和数组参数*/
 ```
+- Array.filter() : 创建一个包含通过测试的数组元素的新数组
+```JavaScript
+var numbers = [45, 4, 9, 16, 25];
+var over18 = numbers.filter(myFunction);
+
+function myFunction(value, index, array) {
+  return value > 18;
+}/* numbers数组为 45,25
+```
+-Array.reduce() :  在每个数组元素上运行函数，以生成（减少它）单个值；从左到右工作，如果要从右到左使用reduceRight()；reduce() 方法不会减少原始数组
+```JavaScript
+/*下面是一个确定数组元素总和的例子
+var numbers1 = [45, 4, 9, 16, 25];
+var sum = numbers1.reduce(myFunction);
+
+function myFunction(total, value, index, array) {
+  return total + value;
+}
+/*reduce函数接受一个初始值，例如reduce(myFunction,100)，则从100开始添加元素值
+```
+- Array.every() : 方法检查**所有**数组值是否通过测试
+- Array.some() : 方法检查**某些**数组值是否通过测试
+- Array.indexOf() 方法在数组中搜索元素值并返回其位置</br>
+array.indexOf(item, start):item必需。要检索的项目, start可选。从哪里开始搜索。负值将从结尾开始的给定位置开始，并搜索到结尾。
+
+
