@@ -248,5 +248,40 @@ function myFunction(total, value, index, array) {
 - Array.some() : 方法检查**某些**数组值是否通过测试
 - Array.indexOf() 方法在数组中搜索元素值并返回其位置</br>
 array.indexOf(item, start):item必需。要检索的项目, start可选。从哪里开始搜索。负值将从结尾开始的给定位置开始，并搜索到结尾。
+- Array.lastIndexOf() : 与 Array.indexOf() 类似，但是从数组结尾开始搜索
+- Array.find() : 方法返回通过测试函数的第一个数组元素的值
+- Array.findIndex() : 方法返回通过测试函数的第一个数组元素的索引
+### 日期
+**日期**</br>
+var d =</br>
+- new Date()
+- new Date(year, month, day, hours, minutes, seconds, milliseconds) : 参数可以省略部分
+- new Date(milliseconds)
+- new Date(date string)
+- new Date(dateString) : 从日期字符串创建一个新的日期对象：
+```javaScript
+var d = new Date("October 13, 2014 11:13:00");
+```
+- new Date(milliseconds) : 创建一个零时加毫秒的新日期对象
+- toDateString() : 方法将日期转换为更易读的格式
+
+**日期格式化**</br>
+- ISO 日期（完整的日期加时、分和秒）: </br>
+写日期也可以添加时、分和秒 (YYYY-MM-DDTHH:MM:SS)：
+```javaScript
+var d = new Date("2018-02-19T12:00:00");
+```
+- JavaScript 短日期 : 短日期通常使用 "MM/DD/YYYY" 这样的语法 "09/11/2019"
+- JavaScript 长日期 : 长日期通常以 "MMM DD YYYY" 这样的语法来写 "Sep 11 2019", 月和天可以互换
+
+
+
+
+
+
+
+
+
+
 
 
