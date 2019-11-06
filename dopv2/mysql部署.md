@@ -165,6 +165,10 @@ spec:
 kubectl apply -f mysql.yml
 ```
 
+在主节点进入mysql数据库命令如下  10.1.70.69是mysql的服务在集群中的内部IP地址
+```
+kubectl run -it --rm --image=mysql:5.6 --restart=Never mysql-client -- mysql -h 10.1.70.69 -ppassword
+```
 ### 删除 mysql pv pvc
 要删除 mysql的pod，首先要删除其deployment，然后再删除pod
 要删除pv，首先要删除其pod，然后删除pvc，最后删除pv
