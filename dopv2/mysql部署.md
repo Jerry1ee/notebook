@@ -88,8 +88,8 @@ spec:
   #清除 PV 的数据  Delete  删除Storage Provider上的对应存储资源
   storageClassName: nfs   #指定PV 的class为nfs
   nfs:
-    path: /root/k8s/nfsdata/mysql-pv    #PV在 NFS服务器上对应的目录
-    server: 172.31.164.123      #暂时不知道这个有什么影响
+    path: /root/k8s/nfsdata/mysql    #PV在 NFS服务器上对应的目录
+    server: 172.31.164.123      #要连接的主机地址
 ```
 创建后执行即可
 ```
