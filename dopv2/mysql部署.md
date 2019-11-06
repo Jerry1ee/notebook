@@ -165,3 +165,7 @@ spec:
 kubectl apply -f mysql.yml
 ```
 
+### 删除 mysql pv pvc
+要删除 mysql的pod，首先要删除其deployment，然后再删除pod
+要删除pv，首先要删除其pod，然后删除pvc，最后删除pv
+
