@@ -118,14 +118,20 @@ kubectl apply -f mysql-pvc.yml
 
 ### 部署 Mysql
 
+这里 mysql的service采用NodePort方式部署，外部可以访问
+
 ```
 apiVersion: v1
 kind: Service
 metadata:
   name: mysql
 spec:
+  type: NodePort
   ports:
-  - port: 3306
+  - protocol: TCP
+    nodePort: 30306
+    port: 3306
+    targetPort: 3306
   selector:
     app: mysql
 ---
@@ -169,6 +175,7 @@ kubectl apply -f mysql.yml
 ```
 kubectl run -it --rm --image=mysql:5.6 --restart=Never mysql-client -- mysql -h 10.1.70.69 -ppassword
 ```
+此时的mysql 数据库部署在 node2节点上，外部连接时，地址为 {node2节点IP}:30306 数据库密码为 password
 ### 删除 mysql pv pvc
 要删除 mysql的pod，首先要删除其deployment，然后再删除pod
 要删除pv，首先要删除其pod，然后删除pvc，最后删除pv
