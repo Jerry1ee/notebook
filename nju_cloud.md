@@ -202,5 +202,41 @@ select version();
 版权声明：本文为CSDN博主「不甘于平凡的溃败」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
 原文链接：https://blog.csdn.net/wohiusdashi/article/details/89358071
 
+1.在用Navicat配置远程连接Mysql数据库时遇到如下报错信息，这是由于Mysql配置了不支持远程连接引起的。
+
+
+
+2.在安装Mysql数据库的主机上登录root用户：
+
+mysql -u root -p
+
+
+
+3.依次执行如下命令：
+
+use mysql;
+ 
+select host from user where user='root';
+可以看到当前主机配置信息为localhost.
+
+
+
+4.将Host设置为通配符%
+
+update user set host = '%' where user ='root';
+Host设置了“%”后便可以允许远程访问。
+
+
+
+5.Host修改完成后记得执行flush privileges使配置立即生效
+
+flush privileges;
+
+
+6.使用navicat 成功连接至mysql
+————————————————
+版权声明：本文为CSDN博主「B-W」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/h985161183/article/details/82218710
+
 
 密码 Mysql123..
