@@ -104,5 +104,214 @@ DATABASES = {
 
 ### 创建模型
 
+和类的概念差不多，包含一个实体的属性，动作等
+
+在我们创建的图书馆应用中，需要创建一个模型Book。Book模型包括四个字段：书名、作者、出版社、出版日期。
+
+向mysite/lib/models.py文件中写入如下代码：
+```
+# lib/models.py
+from django.db import models
+
+class Book(models.Model):
+    name = models.CharField(max_length=200)
+    author = models.CharField(max_length=100)
+    pub_house = models.CharField(max_length=200)
+    pub_date = models.DateTimeField('date published')
+```
+
+### 激活模型
+- 首先将lib应用安装到项目中
+```
+# mysite/mysite/settings.py
+INSTALLED_APPS = [
+    'lib.apps.LibConfig',
+    'django.contrib.admin',
+    ...
+]
+```
+- 现在你的项目已经包含了 lib 应用，运行下面的命令：
+
+```
+python manage.py makemigrations lib
+```
+- 通过运行 makemigrations 命令，Django 会检测你对模型文件的修改，并且把修改的部分储存为一次迁移。
+- 查看迁移命令执行的语句
+```
+python3 manage.py sqlmigrate lib 0001
+```
+
+- 现在运行migrate命令，在数据库里创建新定义的模型的数据表：
+```
+python manage.py migrate 
+```
+在数据库中表已经创建完毕了
+[此处应有张图]
+
+### 使用API
+
+以下语句可以在数据库中进行条目创建
+
+```
+>>>from lib.models import Book
+>>>Book.objects.all()   #获取Book所有对象
+<QuerySet []>
+>>>from django.utils import timezone
+>>>b = Book(name='Business', author='Tom', pub_house='First Press', pub_date=timezone.now())    #创建
+>>>b.save() #保存
+>>>b.id
+1
+>>>b.name
+'Business'
+>>>b.pub_date
+datetime.datetime(2018, 7, 4, 2, 29, 7, 578323, tzinfo=<UTC>)
+```
 
 
+## 模板
+
+### 创建模板
+- 在你的 mysite/lib 目录里创建一个 templates 目录。Django 将会在这个目录里查找模板文件。
+
+- 在 mysite/mysite/settings.py 文件中的 TEMPLATES 配置项描述了 Django 如何载入和渲染模板。默认的设置文件设置了 DjangoTemplates 后端，并设置 APP_DIRS = True。这一选项将会让 DjangoTemplates 在每个 INSTALLED_APPS 文件夹中寻找 templates 子目录。
+
+- 新建模板文件 lib/templates/lib/detail.html ，并向其中写入如下代码：
+```
+# lib/templates/lib/detail.html
+<h1>Book List</h1>
+<table>
+    <tr>
+        <td>书名</td>
+        <td>作者</td>
+        <td>出版社</td>
+        <td>出版时间</td>
+    </tr>
+{% for book in book_list.all %}
+    <tr>
+        <td>{{ book.name }}</td>
+        <td>{{ book.author }}</td>
+        <td>{{ book.pub_house }}</td>
+        <td>{{ book.pub_date }}</td>
+    </tr>
+{% endfor %}
+</table>
+```
+- 模板统一使用点符号.来访问变量的属性。
+- 在示例 {{ book.name }} 中，首先 Django 尝试对 book 对象使用字典查找（也就是使用 obj.get(str) 操作），如果失败了就尝试属性查找（也就是 obj.str 操作），结果是成功了。如果这一操作也失败的话，将会尝试列表查找（也就是 obj[int] 操作）。
+
+- 在 {% for ... in ... %} 循环中发生的函数调用：book_list.all 被解释为 Python 代码 book_list.objects.all() ，将会返回一个可迭代的 Book 对象，这一对象可以在 {% for ... in ... %} 标签内部使用。
+
+### 创建视图
+
+现在我们要创建视图来返回图书列表：
+```
+# mysite/lib/views.py
+from django.shortcuts import render
+from .models import Book
+
+def detail(request):
+    book_list = Book.objects.order_by('-pub_date')[:5]
+    context = {'book_list': book_list}
+    return render(request, 'lib/detail.html', context)
+```
+
+- 在此视图函数detail中，首先将数据库的Book列表按照pub_date时间来排序，存储到变量book_list中。
+
+- 「载入模板，填充上下文，再返回由它生成的 HttpResponse 对象」是一个非常常用的操作流程。于是 Django 提供了一个快捷函数render()。
+
+- render()函数把request对象作为它的第一个参数，模板作为第二个参数，字典作为它的可选的第三个参数。它返回给定模板呈现的给定文本的一个HttpResponse对象。
+
+- 在这里，context信息将会返回到模板lib/detail.html。
+
+### 绑定链接
+
+将新视图添加进lib.urls模块里：
+```
+# lib/urls.py
+from django.urls import path
+
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('detail/', views.detail, name='detail'),
+]
+```
+python manage.py runserver 访问 localhost:8000/lib/detail 可以看到图书列表
+
+
+## MTV模式的增删改查
+
+### 设计表单
+简单前端提交表单，在上一个实验中的lib/templates/lib/detail.html里，添加一个表单。
+```
+<form action="{% url 'addBook' %}" method="post" name="addBook">
+    {% csrf_token %}
+    <p><span>书名：</span><input type="text"  name="name"></p>
+    <p><span>作者：</span><input type="text"  name="author"></p>
+    <p><span>出版社：</span><input type="text"  name="pub_house"></p>
+    <input type="submit" value="添加">
+</form>
+```
+### 命名空间
+
+- 教程项目只有一个应用lib 。在一个真实的 Django 项目中，可能会有五个，十个，二十个，甚至更多应用。Django 如何分辨重名的 URL 呢？
+
+- 举个例子，lib 应用有 detail 视图，可能另一个博客应用也有同名的视图。Django 如何知道 {% url %} 标签到底对应哪一个应用的 URL 呢？
+
+- 答案是：在根 URLconf 中添加命名空间。在 lib/urls.py 文件中稍作修改，加上 app_name 设置命名空间：
+```
+from django.urls import path
+
+from . import views
+
+app_name = 'lib'    #添加这行
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('detail/', views.detail, name='detail'),
+]
+```
+现在回到 lib/templates/lib/detail.html 更改action：
+```
+<form action="{% url 'lib:addBook' %}" method="post" name="addBook">
+```
+
+### 实现添加书籍函数
+
+- 在lib/urls.py里添加URL地址映射：
+```
+# lib/urls.py
+path('addBook/', views.addBook, name='addBook'),
+```
+然后创建addBook函数来实现我们添加书籍的功能。
+
+将下面的代码添加到lib/views.py：
+```
+# lib/views.py
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
+def addBook(request):
+    if request.method == 'POST':
+        temp_name = request.POST['name']
+        temp_author = request.POST['author']
+        temp_pub_house = request.POST['pub_house']
+
+    from django.utils import timezone
+    temp_book = Book(name=temp_name, author=temp_author, pub_house=temp_pub_house, pub_date=timezone.now())
+    temp_book.save()
+
+    #重定向
+    return HttpResponseRedirect(reverse('lib:detail'))
+```
+简单说明：
+
+request.POST 是一个类字典对象，可以通过关键字的名字获取提交的数据。 这个例子中，request.POST['name'] 以字符串形式返回name的值。 request.POST 的值永远是字符串。
+
+在添加书籍之后，代码返回一个 HttpResponseRedirect 而不是常用的 HttpResponse, HttpResponseRedirect 只接收一个参数：用户将要被重定向的 URL。
+
+你应该在每次处理POST数据时，都返回HttpResponseRedirect 。这也不是 Django 的特定技巧，这是优秀的网站开发的实践。
+
+在这个例子中，我们在 HttpResponseRedirect 的构造函数中使用 reverse() 函数。这个函数避免了我们在视图函数中硬编码 URL。它需要我们给出想要跳转的视图的名字和该视图所对应的 URL 模式中需要给该视图提供的参数。 reverse()调用后将返回这样一个字符串：/lib/detail/.
+
+添加书籍功能完成，现在可以随意添加书籍。
